@@ -9,6 +9,7 @@
     { "src": "/api/submit_meter_concern", "dest": "/api/submit_meter_concern.py" },
     { "src": "/api/check_feeder",         "dest": "/api/check_feeder.py"         },
     { "src": "/api/complaints_nearby",    "dest": "/api/complaints_nearby.py"    },
+    { "src": "/api/get_map_config",       "dest": "/api/get_map_config.py"       },
     { "src": "/meter-concern",            "dest": "/public/meter-concern.html"   },
     { "src": "/report-outage",            "dest": "/public/report_outage.html"   },
     { "src": "/",                         "dest": "/public/report_outage.html"   },
