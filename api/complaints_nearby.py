@@ -47,48 +47,45 @@ class handler(BaseHTTPRequestHandler):
             try:
                 lat    = float(body["lat"])
                 lng    = float(body["lng"])
-                radius = min(int(body.get("radius", 1000)), 5000)  # cap at 5km
+                radius = min(int(body.get("radius", 1000)), 5000)
             except (KeyError, ValueError, TypeError):
                 return self._send(400, {
                     "success": False,
-                    "error": "lat, lng are required numbers"
+                    "error": "lat and lng are required"
                 })
 
-            # Rough Philippines bounding box
             if not (4.0 <= lat <= 21.0 and 116.0 <= lng <= 127.0):
-                return self._send(200, {"success": True, "complaints": []})
+                return self._send(200, {"success": True, "complaints": [], "count": 0})
 
             conn = get_conn()
             cur  = conn.cursor(cursor_factory=RealDictCursor)
 
-            # Query active incidents within radius using PostGIS
             cur.execute("""
                 SELECT
                     i.incident_id,
-                    i.incident_type                         AS type,
+                    i.incident_type                          AS type,
                     i.barangay,
                     i.town,
                     i.status,
                     i.priority,
                     i.report_count,
-                    i.first_report_time,
-                    ST_Y(i.geom::geometry)                  AS lat,
-                    ST_X(i.geom::geometry)                  AS lng,
+                    ST_Y(i.geom::geometry)                   AS lat,
+                    ST_X(i.geom::geometry)                   AS lng,
                     ST_Distance(
                         i.geom::geography,
                         ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
-                    )                                       AS distance_meters,
+                    )                                        AS distance_meters,
                     r.details
                 FROM outage_incidents i
                 LEFT JOIN LATERAL (
-                    SELECT details
-                    FROM   outage_reports
+                    SELECT details FROM outage_reports
                     WHERE  incident_id = i.incident_id
                     ORDER  BY timestamp DESC
                     LIMIT  1
                 ) r ON TRUE
                 WHERE
                     i.status IN ('NEW', 'ASSIGNED', 'IN_PROGRESS')
+                    AND i.geom IS NOT NULL
                     AND ST_DWithin(
                         i.geom::geography,
                         ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography,
@@ -100,21 +97,19 @@ class handler(BaseHTTPRequestHandler):
 
             rows = cur.fetchall()
 
-            complaints = []
-            for row in rows:
-                complaints.append({
-                    "incident_id":      row["incident_id"],
-                    "type":             row["type"],
-                    "barangay":         row["barangay"],
-                    "town":             row["town"],
-                    "status":           row["status"],
-                    "priority":         row["priority"],
-                    "report_count":     row["report_count"],
-                    "lat":              float(row["lat"]) if row["lat"] else None,
-                    "lng":              float(row["lng"]) if row["lng"] else None,
-                    "distance_meters":  float(row["distance_meters"]),
-                    "details":          row["details"],
-                })
+            complaints = [{
+                "incident_id":     row["incident_id"],
+                "type":            row["type"],
+                "barangay":        row["barangay"],
+                "town":            row["town"],
+                "status":          row["status"],
+                "priority":        row["priority"],
+                "report_count":    row["report_count"],
+                "lat":             float(row["lat"]) if row["lat"] else None,
+                "lng":             float(row["lng"]) if row["lng"] else None,
+                "distance_meters": float(row["distance_meters"]),
+                "details":         row["details"],
+            } for row in rows]
 
             return self._send(200, {
                 "success":    True,

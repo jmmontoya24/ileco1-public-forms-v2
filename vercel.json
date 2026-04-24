@@ -1,7 +1,8 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/*.py", "use": "@vercel/python" }
+    { "src": "api/*.py", "use": "@vercel/python" },
+    { "src": "public/**", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/submit_power_outage",  "dest": "/api/submit_power_outage.py"  },
@@ -10,7 +11,7 @@
     { "src": "/api/complaints_nearby",    "dest": "/api/complaints_nearby.py"    },
     { "src": "/meter-concern",            "dest": "/public/meter-concern.html"   },
     { "src": "/report-outage",            "dest": "/public/report_outage.html"   },
-    { "src": "/",                         "dest": "/public/index.html"           },
+    { "src": "/",                         "dest": "/public/report_outage.html"   },
     { "src": "/(.*)",                     "dest": "/public/$1"                   }
   ]
 }
