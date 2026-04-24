@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "functions": {
-    "api/submit_power_outage.py":  { "runtime": "python3.12" },
-    "api/submit_meter_concern.py": { "runtime": "python3.12" },
-    "api/check_feeder.py":         { "runtime": "python3.12" },
-    "api/complaints_nearby.py":    { "runtime": "python3.12" }
-  },
+  "builds": [
+    { "src": "api/*.py", "use": "@vercel/python" }
+  ],
   "routes": [
     { "src": "/api/submit_power_outage",  "dest": "/api/submit_power_outage.py"  },
     { "src": "/api/submit_meter_concern", "dest": "/api/submit_meter_concern.py" },
