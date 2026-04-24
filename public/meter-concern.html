@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Concern Form - ILECO1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen py-8 px-4">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-6">
+                <h1 class="text-2xl font-bold mb-2">📋 Meter Concern Submission</h1>
+                <p class="text-blue-100">ILECO1 - Iloilo Electric Cooperative, Inc.</p>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden bg-green-50 border-l-4 border-green-400 p-4 m-6">
+                <div class="flex">
+                    <svg class="w-6 h-6 text-green-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <div>
+                        <h3 class="text-green-800 font-semibold">Submission Successful!</h3>
+                        <p class="text-green-700 text-sm">Reference Number: <span id="refNumber" class="font-mono font-bold"></span></p>
+                        <p class="text-green-600 text-xs mt-1">Please keep this reference number for follow-up inquiries.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden bg-red-50 border-l-4 border-red-400 p-4 m-6">
+                <div class="flex">
+                    <svg class="w-6 h-6 text-red-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <div>
+                        <h3 class="text-red-800 font-semibold">Submission Failed</h3>
+                        <p id="errorText" class="text-red-700 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Progress -->
+            <div id="uploadProgress" class="hidden m-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+                    <span class="text-blue-800 font-medium text-sm" id="uploadStatusText">Uploading files...</span>
+                </div>
+                <div class="w-full bg-blue-200 rounded-full h-2">
+                    <div id="uploadProgressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p class="text-blue-600 text-xs mt-1" id="uploadProgressDetail">0 of 0 files uploaded</p>
+            </div>
+
+            <!-- Form -->
+            <div id="formContainer" class="p-6 space-y-6">
+
+                <!-- Account Information -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Account Information</h2>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Account Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="accountNumber"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter your ILECO1 account number" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Consumer Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="consumerName"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Full name as registered" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Contact Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" id="contactNumber"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Mobile or landline number" required>
+                    </div>
+                </div>
+
+                <!-- Meter Details -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Meter Details</h2>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Meter Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="meterNumber"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Number printed on your meter" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Service Address <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="serviceAddress"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Complete address" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Barangay <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="barangay"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter barangay name" required>
+                    </div>
+                </div>
+
+                <!-- Concern Details -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Concern Details</h2>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Type of Meter Concern <span class="text-red-500">*</span>
+                        </label>
+                        <select id="concernType"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Select concern type</option>
+                            <option value="not_working">Meter Not Working / Blank Display</option>
+                            <option value="high_consumption">High Consumption / High Bill</option>
+                            <option value="running_fast_slow">Meter Running Fast / Slow</option>
+                            <option value="noise_burning">Noise or Burning Smell ⚠️ CRITICAL</option>
+                            <option value="tampered_seal">Tampered / Broken Seal</option>
+                            <option value="others">Others (please specify)</option>
+                        </select>
+                    </div>
+
+                    <!-- Critical warning -->
+                    <div id="criticalWarning" class="hidden bg-red-50 border-2 border-red-400 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">🚨</span>
+                            <div>
+                                <p class="text-red-800 font-bold">CRITICAL CONCERN — Immediate Action Required</p>
+                                <p class="text-red-700 text-sm mt-1">
+                                    A burning smell or unusual noise from your meter is a safety hazard.
+                                    Please <strong>do not touch the meter</strong> and call our emergency hotline immediately:
+                                </p>
+                                <a href="tel:+639989893028" class="inline-block mt-2 bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm">
+                                    📞 Call 09989893028 Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="otherConcernDiv" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Please Specify Concern <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="otherConcern"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Describe your concern">
+                    </div>
+
+                    <!-- ✅ UPDATED: Date AND Time fields side by side -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Date &amp; Time Issue Noticed <span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">📅 Date</label>
+                                <input type="date" id="dateNoticed"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">🕐 Time</label>
+                                <input type="time" id="timeNoticed"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <p class="text-xs text-gray-400 mt-1">Optional — leave blank if unsure</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Additional Details (Optional)
+                        </label>
+                        <textarea id="additionalDetails" rows="4"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            placeholder="Any other information about the issue"></textarea>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Supporting Evidence</h2>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Upload Photos/Videos <span class="text-red-500">*</span>
+                        </label>
+                        <div id="dropZone"
+                            class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                            <input type="file" id="fileUpload" multiple accept="image/*,video/*" class="hidden">
+                            <label for="fileUpload" class="cursor-pointer block">
+                                <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <p class="text-sm text-gray-600 font-medium">Click to upload or drag & drop</p>
+                                <p class="text-xs text-gray-500 mt-1">Photos and videos accepted. At least 1 photo required. Max 10MB per file.</p>
+                            </label>
+                        </div>
+                        <div id="fileList" class="mt-3 space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button onclick="submitForm()" id="submitBtn"
+                    class="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    📤 Submit Meter Concern
+                </button>
+
+                <p class="text-xs text-gray-400 text-center">
+                    Emergency Hotline: <a href="tel:+639989893028" class="text-blue-500">09989893028</a> (24/7)
+                </p>
+            </div>
+        </div>
+    </div>
+
+<script>
+const SUPABASE_URL    = 'https://eliqhpnmhgxeufiymdeh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsaXFocG5taGd4ZXVmaXltZGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNTAxMTQsImV4cCI6MjA4NTcyNjExNH0._z4gSwUIwM5ybrhQSO012QIdzsyHFr1wSGgEwSdzoGY';
+const STORAGE_BUCKET  = 'meter-concerns';
+const API_BASE        = '/api';
+
+let selectedFiles = [];
+
+document.getElementById('fileUpload').addEventListener('change', function(e) {
+    const newFiles = Array.from(e.target.files);
+    for (const file of newFiles) {
+        if (file.size > 10 * 1024 * 1024) {
+            showError(`File "${file.name}" exceeds 10MB limit.`);
+            continue;
+        }
+        selectedFiles.push(file);
+    }
+    renderFileList();
+});
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('border-blue-500', 'bg-blue-50'); });
+dropZone.addEventListener('dragleave', e => { dropZone.classList.remove('border-blue-500', 'bg-blue-50'); });
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    const dropped = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
+    dropped.forEach(f => { if (f.size <= 10 * 1024 * 1024) selectedFiles.push(f); });
+    renderFileList();
+});
+
+function renderFileList() {
+    const list = document.getElementById('fileList');
+    list.innerHTML = '';
+    selectedFiles.forEach((file, i) => {
+        const isImage = file.type.startsWith('image/');
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200';
+        div.innerHTML = `
+            <div class="flex items-center gap-3 min-w-0">
+                <span class="text-2xl flex-shrink-0">${isImage ? '🖼️' : '🎥'}</span>
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-800 truncate">${file.name}</p>
+                    <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
+                </div>
+            </div>
+            <button onclick="removeFile(${i})" class="text-red-400 hover:text-red-600 flex-shrink-0 ml-2" title="Remove">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    renderFileList();
+}
+
+document.getElementById('concernType').addEventListener('change', function() {
+    document.getElementById('otherConcernDiv').classList.toggle('hidden', this.value !== 'others');
+    document.getElementById('criticalWarning').classList.toggle('hidden', this.value !== 'noise_burning');
+});
+
+async function uploadFileToSupabase(file, referenceNumber) {
+    const timestamp  = Date.now();
+    const safeName   = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const storagePath = `${referenceNumber}/${timestamp}_${safeName}`;
+
+    const res = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${storagePath}`,
+        {
+            method:  'POST',
+            headers: {
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type':  file.type || 'application/octet-stream',
+                'x-upsert':      'true',
+            },
+            body: file,
+        }
+    );
+
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Upload failed for ${file.name}`);
+    }
+
+    const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${storagePath}`;
+
+    return {
+        file_name:  file.name,
+        file_path:  storagePath,
+        file_url:   publicUrl,
+        file_type:  file.type,
+        file_size:  file.size,
+    };
+}
+
+async function submitForm() {
+    hideMessages();
+
+    const fields = {
+        account_number:     document.getElementById('accountNumber').value.trim(),
+        consumer_name:      document.getElementById('consumerName').value.trim(),
+        contact_number:     document.getElementById('contactNumber').value.trim(),
+        meter_number:       document.getElementById('meterNumber').value.trim(),
+        service_address:    document.getElementById('serviceAddress').value.trim(),
+        barangay:           document.getElementById('barangay').value.trim(),
+        concern_type:       document.getElementById('concernType').value,
+        other_concern:      document.getElementById('otherConcern').value.trim(),
+        date_noticed:       document.getElementById('dateNoticed').value,
+        // ✅ NEW: include time_noticed
+        time_noticed:       document.getElementById('timeNoticed').value || null,
+        additional_details: document.getElementById('additionalDetails').value.trim(),
+    };
+
+    const required = ['account_number','consumer_name','contact_number',
+                       'meter_number','service_address','barangay',
+                       'concern_type','date_noticed'];
+    for (const key of required) {
+        if (!fields[key]) { showError('Please fill in all required fields.'); return; }
+    }
+    if (fields.concern_type === 'others' && !fields.other_concern) {
+        showError('Please specify your concern.'); return;
+    }
+    if (selectedFiles.length === 0) {
+        showError('Please upload at least one photo of your meter.'); return;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Processing...';
+
+    const refNum = generateTempRef();
+
+    try {
+        showUploadProgress(true);
+        const uploadedFiles = [];
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            setProgress(i, selectedFiles.length, `Uploading ${selectedFiles[i].name}...`);
+            const uploaded = await uploadFileToSupabase(selectedFiles[i], refNum);
+            uploadedFiles.push(uploaded);
+            setProgress(i + 1, selectedFiles.length, `Uploaded ${i + 1} of ${selectedFiles.length} files`);
+        }
+
+        showUploadProgress(false);
+
+        submitBtn.textContent = '⏳ Submitting...';
+        const payload = { ...fields, uploaded_files: uploadedFiles };
+
+        const res = await fetch(`${API_BASE}/submit_meter_concern`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+
+        if (res.ok && result.success) {
+            showSuccess(result.reference_number);
+            resetForm();
+        } else {
+            showError(result.error || 'Submission failed. Please try again.');
+        }
+
+    } catch (err) {
+        showUploadProgress(false);
+        console.error('Submission error:', err);
+        showError(err.message || 'Network error. Please check your connection and try again.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '📤 Submit Meter Concern';
+    }
+}
+
+function generateTempRef() {
+    const d = new Date();
+    const ds = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const uid = Math.random().toString(36).substring(2, 10).toUpperCase();
+    return `MC-${ds}-${uid}`;
+}
+
+function showUploadProgress(show) {
+    document.getElementById('uploadProgress').classList.toggle('hidden', !show);
+}
+
+function setProgress(done, total, label) {
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('uploadProgressBar').style.width = pct + '%';
+    document.getElementById('uploadProgressDetail').textContent = `${done} of ${total} files uploaded`;
+    document.getElementById('uploadStatusText').textContent = label;
+}
+
+function showSuccess(refNumber) {
+    document.getElementById('refNumber').textContent = refNumber;
+    document.getElementById('successMessage').classList.remove('hidden');
+    document.getElementById('errorMessage').classList.add('hidden');
+    document.getElementById('uploadProgress').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(message) {
+    document.getElementById('errorText').textContent = message;
+    document.getElementById('errorMessage').classList.remove('hidden');
+    document.getElementById('successMessage').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideMessages() {
+    document.getElementById('successMessage').classList.add('hidden');
+    document.getElementById('errorMessage').classList.add('hidden');
+}
+
+function resetForm() {
+    document.querySelectorAll('input:not([type=file]), select, textarea').forEach(el => el.value = '');
+    selectedFiles = [];
+    renderFileList();
+    document.getElementById('otherConcernDiv').classList.add('hidden');
+    document.getElementById('criticalWarning').classList.add('hidden');
+}
+
+// Set max date to today
+document.getElementById('dateNoticed').max = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
